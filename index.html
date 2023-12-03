@@ -388,28 +388,34 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-md-8">
-            <form name="submit-to-google-sheet">
+          <div class="col-md-7">
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+              <strong>Terima Kasih!</strong> Pesan Anda telah kami terima.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form name="chris-contact-form">
               <div class="mb-4 shadow">
-                <input type="text" class="form-control" name="Name" placeholder="Your Name">
+                <input type="text" class="form-control" name="nama" placeholder="Your Name">
               </div>
 
               <div class="mb-4 shadow">
-                <input type="email" class="form-control" name="Email" id="exampleInputEmail1"
+                <input type="email" class="form-control" name="email" id="exampleInputEmail1"
                   aria-describedby="emailHelp" placeholder="Your Email">
               </div>
 
               <div class="mb-4 shadow">
-                <textarea class="form-control" name="Message" id="exampleFormControlTextarea1" rows="3"
+                <textarea class="form-control" name="pesan" id="exampleFormControlTextarea1" rows="3"
                   placeholder="Your Message"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary"><span>Send</span><i
-                  class="fa-solid fa-paper-plane mx-1"></i></button>
+              <button type="submit" class="btn btn-primary btn-kirim">Send</button>
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+              </button>
             </form>
-            <div class="alert alert-success" role="alert" id="msg">
-            </div>
           </div>
         </div>
+
       </div>
     </section>
     <svg class="no5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -536,18 +542,25 @@
 
     </script>
     <script>
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbxk79dcF5uAsH_CZNGS86iv1MfiZCLnH0CP_zzoVzMiz-XRX1QBTxAqdEYY5vcBJmPiWw/exec'
-      const form = document.forms['submit-to-google-sheet']
-      const msg = document.getElementById("msg")
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxmkHxLunL9bTSW2MNOkY5H8iE-tRJ63pABVIdozT9CFumoQzaQItaUquaBw6rXajMS/exec'
+      const form = document.forms['chris-contact-form']
+      const btnKirim = document.querySelector('.btn-kirim');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert = document.querySelector('.my-alert')
+
+
+
       form.addEventListener('submit', e => {
         e.preventDefault()
+        btnLoading.classList.toggle('d-none')
+        btnKirim.classList.toggle('d-none')
         fetch(scriptURL, { method: 'POST', body: new FormData(form) })
           .then(response => {
-            msg.innerHTML = "Message sent Succesfully"
-            setTimeout(function () {
-              msg.innerHTML = ""
-            }, 5000)
-            form.reset()
+            btnLoading.classList.toggle('d-none')
+            btnKirim.classList.toggle('d-none')
+            myAlert.classList.toggle('d-none')
+            form.reset();
+            console.log('Success!', response)
           })
           .catch(error => console.error('Error!', error.message))
       })
